@@ -4,32 +4,32 @@ An AI-powered application that lets users ask questions about website content an
 
 ✨ Features
 
-- 🌐 Chat with Websites — Enter a website URL and ask questions about its content.
-- 📄 Chat with Documents — Upload PDF or TXT files and ask questions.
-- 🧠 Semantic Search — Retrieve relevant content using embeddings and FAISS.
-- 🤖 Local AI — Generate answers using Ollama and Llama 3.2.
-- 📚 Source References — View relevant content used to generate answers.
-- 💻 Interactive UI — Built with Streamlit.
+* 🌐 Chat with Websites — Enter a website URL and ask questions about its content.
+* 📄 Chat with Documents — Upload PDF or TXT files and ask questions.
+* 🧠 Semantic Search — Retrieve relevant content using embeddings and FAISS.
+* 🤖 Local AI — Generate answers using Ollama and Llama 3.2.
+* 📚 Source References — View relevant content used to generate answers.
+* 💻 Interactive UI — Built with Streamlit.
 
 🛠️ Tech Stack
 
-- Python
-- Streamlit
-- LangChain
-- Hugging Face Sentence Transformers
-- FAISS
-- Ollama
-- Llama 3.2
-- PyMuPDF
-- Beautiful Soup
+* Python
+* Streamlit
+* LangChain
+* Hugging Face Sentence Transformers
+* FAISS
+* Ollama
+* Llama 3.2
+* PyMuPDF
+* Beautiful Soup
 
 ⚙️ Prerequisites
 
 Install the following before running the project:
 
-- Python
-- Git
-- Ollama
+* Python
+* Git
+* Ollama
 
 Download and install Ollama from its official website:
 https://ollama.com/
@@ -81,9 +81,9 @@ Document Chat
 
 AI-Website-Document-Assistant/
 ├── app/
-│ ├── loader.py
-│ ├── streamlit_app.py
-│ └── vectorstore.py
+│   ├── loader.py
+│   ├── streamlit_app.py
+│   └── vectorstore.py
 ├── .gitignore
 ├── README.md
 ├── main.py
@@ -91,10 +91,10 @@ AI-Website-Document-Assistant/
 
 ⚠️ Notes
 
-- Ollama must be running locally with the required model available.
-- The first embedding-model load may require an internet connection to download model files.
-- Website access and text extraction depend on the website’s structure and accessibility.
-- Scanned PDFs may require OCR for text extraction.
+* Ollama must be running locally with the required model available.
+* The first embedding-model load may require an internet connection to download model files.
+* Website access and text extraction depend on the website’s structure and accessibility.
+* Scanned PDFs may require OCR for text extraction.
 
 👨‍💻 Author
 
