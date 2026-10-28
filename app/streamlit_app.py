@@ -3,7 +3,7 @@ import pymupdf
 from urllib.parse import urlparse
 from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_ollama import ChatOllama
+from langchain_groq import ChatGroq
 from loader import load_and_split
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -47,9 +47,10 @@ def create_vectorstore(url):
 # 3 - Load the language model
 @st.cache_resource
 def load_rag():
-    return ChatOllama(
-        model="llama3.2:3b",
-        temperature=0
+    return ChatGroq(
+        model="llama-3.3-70b-versatile",
+        temperature=0,
+        api_key=st.secrets["GROQ_API_KEY"]
     )
 
 
