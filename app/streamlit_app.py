@@ -62,7 +62,7 @@ def load_website(url):
     parsed = urlparse(url)
 
     if parsed.scheme not in ("http", "https") or not parsed.netloc:
-        st.sidebar.warning("Please enter a valid HTTP or HTTPS URL.")
+        st.warning("Please enter a valid HTTP or HTTPS URL.")
         return
 
     try:
@@ -70,8 +70,11 @@ def load_website(url):
             st.session_state.vectorstore = create_vectorstore(url)
             st.session_state.loaded_url = url
             st.session_state.chat_history = []
+
+        st.success("Website loaded successfully!")
+
     except Exception as e:
-        st.sidebar.error(f"Could not load website: {e}")
+        st.error(f"Could not load website: {e}")
 
 
 # 5 - Session state
@@ -97,50 +100,7 @@ if "document_name" not in st.session_state:
     st.session_state.document_name = ""
 
 
-# 6 - Sidebar
-with st.sidebar:
-    st.title("🌐 Chat with Websites")
-    st.caption("Ask questions about any webpage using a local AI model.")
-    st.divider()
 
-    st.subheader("Website source")
-    # ----------------
-    # FILE :
-    # ----------------
-    st.divider()
-    
-    # st.form lets the Enter key submit the URL
-    with st.form("load_form"):
-        web_url = st.text_input(
-            "Website URL",
-            placeholder="https://en.wikipedia.org/wiki/Car",
-            label_visibility="collapsed"
-        )
-        load_clicked = st.form_submit_button(
-            "Load website",
-            type="primary",
-            use_container_width=True
-        )
-
-    if load_clicked:
-        load_website(web_url)
-
-    # Loaded status
-    if st.session_state.loaded_url:
-        domain = urlparse(st.session_state.loaded_url).netloc
-        st.success(f"✅ Loaded: {domain}")
-
-    # Example link
-    st.caption("Or try an example:")
-    if st.button("📖 Wikipedia: Car", use_container_width=True):
-        load_website("https://en.wikipedia.org/wiki/Car")
-        st.rerun()
-
-    st.divider()
-
-    if st.button("🗑️ Clear chat", use_container_width=True):
-        st.session_state.chat_history = []
-        st.rerun()
 
 # 7 - Main area
 
@@ -313,15 +273,42 @@ elif st.session_state.page == "website":
         st.rerun()
 
     st.title("🌐 Website Assistant")
+    st.write("Enter a website URL and ask questions about its content.")
 
-    if st.session_state.vectorstore is None:
-        st.info("👈 Enter a website URL in the sidebar to get started.")
+    # Website URL input in the main page
+    with st.form("load_form"):
+        web_url = st.text_input(
+            "Website URL",
+            value=st.session_state.loaded_url or "",
+            placeholder="https://en.wikipedia.org/wiki/Car"
+        )
 
-    else:
+        load_clicked = st.form_submit_button(
+            "🌐 Load Website",
+            type="primary",
+            use_container_width=True
+        )
+
+    if load_clicked:
+        load_website(web_url)
+
+    # Example website
+    if st.button("📖 Try Example: Wikipedia Car"):
+        load_website("https://en.wikipedia.org/wiki/Car")
+        st.rerun()
+
+    # Show loaded website
+    if st.session_state.vectorstore is not None:
         domain = urlparse(st.session_state.loaded_url).netloc
-        st.caption(f"Chatting with: **{domain}**")
+        st.success(f"Connected to: {domain}")
 
-    # Display website chat history
+        if st.button("🗑️ Clear Chat"):
+            st.session_state.chat_history = []
+            st.rerun()
+
+    st.divider()
+
+    # Display chat history
     for chat in st.session_state.chat_history:
         with st.chat_message("user"):
             st.write(chat["question"])
@@ -329,7 +316,7 @@ elif st.session_state.page == "website":
         with st.chat_message("assistant"):
             st.write(chat["answer"])
 
-    # Ask a question about the website
+    # Chat input at the bottom
     if qt := st.chat_input(
         "Ask about the website...",
         disabled=st.session_state.vectorstore is None
@@ -364,7 +351,9 @@ Latest Question:
 Return only the rewritten question. Do not answer it.
 """
 
-                search_query = llm.invoke(rewrite_prompt).content.strip()
+                search_query = llm.invoke(
+                    rewrite_prompt
+                ).content.strip()
 
             retriever = st.session_state.vectorstore.as_retriever(
                 search_type="mmr",
@@ -383,7 +372,7 @@ You are a helpful website question-answering assistant.
 Instructions:
 - Answer using only the website context.
 - Use conversation history to understand follow-up questions.
-- If the answer is not available in the website context,
+- If the answer is unavailable in the website context,
   say you couldn't find it in the loaded website.
 - Do not make up information.
 
@@ -412,7 +401,8 @@ Answer:
             with st.expander("📚 Sources"):
                 for i, doc in enumerate(results, start=1):
                     st.markdown(
-                        f"**Source {i}:** {doc.metadata.get('source', 'Unknown')}"
+                        f"**Source {i}:** "
+                        f"{doc.metadata.get('source', 'Unknown')}"
                     )
                     st.write(doc.page_content)
 
