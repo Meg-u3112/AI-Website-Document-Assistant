@@ -407,4 +407,5 @@ Answer:
                     st.write(doc.page_content)
 
         except Exception as e:
+
             st.error(f"Error generating answer: {e}")
