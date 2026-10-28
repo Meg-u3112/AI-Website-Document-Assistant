@@ -4,7 +4,7 @@ from urllib.parse import urlparse
 from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_ollama import ChatOllama
-from app.loader import load_and_split
+from loader import load_and_split
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
